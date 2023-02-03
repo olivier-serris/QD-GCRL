@@ -1,0 +1,4 @@
+gym-gmazes @ git+https://github.com/nicolascastanet/gym-gmazes@cb9dae675ac1b889647984503d03a124b3a7cb03
+torch
+tensorboard
+hydra-core

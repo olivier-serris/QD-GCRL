@@ -1,0 +1,26 @@
+seed : 10
+
+env : 
+  name : GMazeGoal-v0  # GMazeGoalDubins
+  grid_size : [3,3]
+  action_scale : 0.1
+  walls : [[[-1,-0.25],[0.5,-0.25]], ]
+
+  
+algo : 
+  start_pop_size : 6
+  n_generations : 20
+  reward_type : sparse # sparse / cell
+
+  replay_buffer_size : 1_000_000
+  step_per_rollout : 70
+  batch_size : 64
+  gd_steps_per_step : 1
+  noise : False
+
+  RL : 
+    name : TD3
+    params : 
+      actor_lr : 3e-4 #  3e-3
+      critic_lr : 3e-4  #  3e-3
+      tau : 5e-3 # 5e-2
