@@ -25,7 +25,7 @@ from utils import GoalGrid, logs, get_weights, set_weights
 from setters import GoalGridSetter
 
 
-def agent_rollout(
+def single_agent_rollout(
     env,
     env_info,
     master_rng,
@@ -118,7 +118,7 @@ def agent_rollout(
     return trajectory_metrics
 
 
-def evaluate(
+def evaluate_all_agents(
     env,
     env_info,
     master_rng,
@@ -132,7 +132,7 @@ def evaluate(
 ):
     metric_per_agent = []
     for agent in agents:
-        metrics = agent_rollout(
+        metrics = single_agent_rollout(
             env,
             env_info,
             master_rng,
@@ -157,7 +157,7 @@ def evaluate(
     return merged_metrics
 
 
-def select_agents(agents, scores):
+def update_population(agents, scores):
     """Filter the agents based on their grid scores,
     An agent is kept only if it has a at least one score better than all other on a specific cell of the grid.
     """
@@ -207,7 +207,7 @@ def learn(
 
     for gen in range(n_generations):
         n_step_done = n_step_per_pol * len(agents) * gen
-        metrics = evaluate(
+        metrics = evaluate_all_agents(
             env,
             env_info,
             master_rng,
@@ -222,12 +222,12 @@ def learn(
         for agent, metric in zip(agents, metrics):
             score_by_agent[id(agent)].append(metric)
 
-        agents = select_agents(agents, metrics["cr"])
+        agents = update_population(agents, metrics["cr"])
         update_policies(agents, buffer, batch_size, gd_steps_per_step, n_step_per_pol)
         logs(goal_grid, agents, metrics, writer, n_step_done, gen)
 
 
-@hydra.main(config_path=f"{os.getcwd()}/configs/", config_name="simple_sparse.yaml")
+@hydra.main(config_path=f"{os.getcwd()}/configs/", config_name="large_config.yaml")
 def launch(hydra_config):
 
     cfg = OmegaConf.to_container(hydra_config, resolve=True)

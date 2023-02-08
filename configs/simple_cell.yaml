@@ -16,7 +16,7 @@ algo :
   step_per_rollout : 70
   batch_size : 64
   gd_steps_per_step : 1
-  noise : True
+  noise : False
 
   RL : 
     name : TD3

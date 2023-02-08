@@ -215,7 +215,7 @@ def logs(goal_grid, agents, metrics, writer, n_step_done, gen):
     )
     writer.add_figure(
         "Pop/best_pol_per_cell",
-        score_matrix_image(best_pol_image, f"SR grid"),
+        score_matrix_image(best_pol_image, f"Best pol id per cell"),
         global_step=n_step_done,
     )
 
